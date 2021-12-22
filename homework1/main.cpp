@@ -1,45 +1,44 @@
-//подключенные библиотеки
+#include <stdlib.h>
 #include <iostream>
-#include <fstream> 
+#include <fstream>
 #include <cmath>
 using namespace std;
 
-int main()//главная функция выполняюща программу
+int main(int argc, char** argv)
 {
-	setlocale(LC_ALL, "Rus");//Установка русского языка для консоли, избегает ошибки , если пишутся непонятные символы
-	int x, y, x0, y0, xl = 0, yl = 0, xr = 0, yr = 0;//объявление переменных
+	string input_name;
 
-	double cosr = 1, cosl = 1, cos;//объявление переменных
-
-	ifstream input_file(input_name);//открытие файла на чтение
-
-	in >> x0 >> y0;//запись из файла значений x0 y0
-	if (in.is_open())//проверка на открыт ли файл
+	if (argc == 2)
 	{
-		while (in >> x >> y)//условие по которому идет проверка пока идёт запись в x и y мы выполняет то что в следующих {...}
+		input_name = argv[1];
+	}
+	else {
+		input_name = "in.txt";
+	}
+	ifstream input_file(input_name);
+
+	int x, y, x0, y0, xl = 0, yl = 0, xr = 0, yr = 0;
+
+	double cosr = 1, cosl = 1, cos;
+
+	input_file >> x0 >> y0;
+
+	while (input_file >> x >> y)
+	{
+		cos = (x0*x + y0 * y) / (sqrt(x*x + y * y)*sqrt(x0*x0 + y0 * y0));
+		cos = round(cos * 1000.0) / 1000.0;
+		if (cos <= cosl && (y0*x < x0*y))
 		{
-				cos = (x0 * x + y0 * y) / (sqrt(x * x + y * y) * sqrt(x0 * x0 + y0 * y0));
-				cos = round(cos * 1000.0) / 1000.0;//расчеты
-				
-				if (cos <= cosl && (y0 * x < x0 * y))
-				{
-					cosl = cos;
-					xl = x; yl = y;
-				}// if для поиска крайнего левого значения х и y
-
-				if (cos <= cosr && (y0 * x >= x0 * y))
-				{
-					cosr = cos;
-					xr = x; yr = y;
-				}// if для поиска крайнего правого значения х и у
+			cosl = cos;
+			xl = x; yl = y;
 		}
-		in.close();//закрытие файла на чтение, правильный тон, также осовобождение памяти
-		cout << "Левые крайние значения: " << xl << " " << yl << endl;
-		cout << "Правые крайние значения: " << xr << " " << yr << endl;
-	}
-	else
-	{
-		cout << "Файл отсутствует или его не удалось прочитать";//второй исход проверки, если файл не открыт на чтение
+		if (cos <= cosr && (y0*x >= x0 * y))
+		{
+			cosr = cos;
+			xr = x; yr = y;
+		}
 	}
 
+	cout << "Leftmost: " << xl << " " << yl << endl;
+	cout << "Rightmost: " << xr << " " << yr << endl;
 }
