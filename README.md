@@ -1,1 +1,2 @@
-# HW
+# Homework 
+Variant #1
