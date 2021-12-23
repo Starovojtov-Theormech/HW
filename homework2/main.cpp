@@ -54,14 +54,6 @@ int solve(vector<vector<double>> bars){
     }
     i += 1;
   }
-  
-  if (!right){ 
-    return int(0); 
-  }else{ 
-    return bars.size(); // ответ - последняя зона
-  }
-  return 0;
-}
 
 
 int main(int argc, char** argv) {
