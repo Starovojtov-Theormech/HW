@@ -1,110 +1,91 @@
 #include <iostream>
+#include <cmath>
 #include <fstream>
 #include <vector>
-#include <cmath>
 #include <algorithm>
-#include <string>
-
+#include <set>
 using namespace std;
 
-// Считывание параметров столбов
-void Column(ifstream &input_file, vector<double> &X, vector<double> &H) 
-{
-	double x, h;
-	input_file >> x >> h;
-	X.push_back(x);
-	H.push_back(h);
-}
+#define g 9.81
 
-//Вычисления
-void Math2(double x0, double h0, double vx, double vy, vector<double> &X, vector<double> &H, int &zone,
-	int dir)
-{
-	double y, t;
+double h0;
+double vx;
+double vy;
 
-	for (int i = zone; (i > -1 && i < X.size()); i = i + dir) {
-		if (i == -1)
-		{
-			break;
-		}
-		t = (X[i + dir] - x0) / (dir*vx);
-		y = h0 + vy * t - 9.81 / 2 * pow(t, 2);
-		if (H[i + dir] < y)
-		{
-			zone += dir;
-		}
-		else if ((y < 0) || (zone == 0))
-		{
+double y(double x){
+  return (-(g/(2*pow(vx,2)))*pow(x,2) + (vy/vx)*x + h0);}
 
-		}
-		else
-		{
-			double vyt = vy - 9.81*t;
-			dir = dir * -1;
-			Math2(X[i], y, vx, vyt, X, H, zone, dir);
-			return;
-		}
-	}
-}
+int ans(int n, set<int> s){
+  for (int i = 0; i < n; i++){
+    if (s.count(i) == 0){
+      return i;
+    }
+  }
+  return 0;}
 
-void Math1(ifstream &input_file, double &h0, double &vx, double &vy, vector<double> &X, vector<double> &H,
-	int &zone)
-{
-	string line;
-	double t, y;
-
-	while (getline(input_file, line))
-	{
-		Column(input_file, X, H);
-		t = (X.back() - 0) / (vx);
-		y = h0 + vy * t - 9.81 / 2 * pow(t, 2);
-		if (H.back() < y)
-		{
-			zone++;
-		}
-		else if ((y < 0) || (zone == 0))
-		{
-			return;
-		}
-		else
-		{
-			double vyt = vy - 9.81*t;
-			Math2(X.back(), y, vx, vyt, X, H, zone, -1);
-			return; 
-		}
-	}
+int solve(vector<vector<double>> bars){
+  int zones = bars.size()+1;
+  set <int> forbid; 
+  int i = 0;
+  bool right = true; 
+  while (i < bars.size()){ 
+      
+    if (y(bars[i][0]) <= bars[i][1]){ 
+    
+      if (right){
+        for (int j=i; j < bars.size(); j++){
+          forbid.insert(int(bars[j][2]));}
+      }else{
+        forbid.insert(0);
+        for (int j=i+1; j < bars.size(); j++){
+          forbid.insert(int(bars[j][2]));}
+      }
+      
+      right = !right; 
+      if (zones - forbid.size() == 1){ 
+        return ans(zones, forbid);} 
+        
+      vector<vector<double>> bars1 = bars;
+      for (int j=0; j < bars.size(); j++){
+        bars1[j][0] = 2*bars[i][0] - bars[j][0];}
+      reverse( bars1.begin(), bars1.end() );
+      bars = bars1;
+      i = bars.size()-i-1;
+    }
+    i += 1;
+  }
+  
+  if (!right){ 
+    return int(0); 
+  }else{ 
+    return bars.size(); // ответ - последняя зона
+  }
+  return 0;
 }
 
 
-int main(int argc, char** argv)
-{
-	string input_name;
+int main(int argc, char** argv) {
+  if(argc == 2){
+      
+  }else{
+      
+  }
+  
 
-	if (argc == 2)
-	{
-		input_name = argv[1];
-	}
-	else {
-		input_name = "input.txt";
-	}
-	ifstream input_file(input_name);
+  ifstream file (argv[1]);
+  file >> h0;
+  file >> vx >> vy;
+  vector<vector<double>> bars;
+  double x = 0;
+  double h = 0;
+  double n = 1; 
+  while (file >> x){
+    file >> h;
+    bars.push_back({x,h,n});
+    n++;
+  }
+  file.close();
 
-	double h0, vx, vy;
-
-	int zone = 0, i = 0;
-
-	string line;
-
-	// Координаты и высоты столбов
-	vector<double> X;
-	vector<double> H;
-
-	// Получение начальных значений
-	input_file >> h0;
-	input_file >> vx >> vy;
-
-	Math1(input_file, h0, vx, vy, X, H, zone);
-
-	cout << zone << endl;
-	return 0;
+  cout << solve(bars);
+  return 0;
 }
