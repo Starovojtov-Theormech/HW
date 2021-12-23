@@ -15,10 +15,6 @@ void Column(ifstream &input_file, vector<double> &X, vector<double> &H)
 	X.push_back(x);
 	H.push_back(h);
 }
-if (X.size() == 0){ 
-	size=0
-}
-
 
 //Вычисления
 void Math2(double x0, double h0, double vx, double vy, vector<double> &X, vector<double> &H, int &zone,
