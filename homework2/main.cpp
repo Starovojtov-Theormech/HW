@@ -15,6 +15,7 @@ double vy;
 double y(double x){
   return (-(g/(2*pow(vx,2)))*pow(x,2) + (vy/vx)*x + h0);}
 
+
 int ans(int n, set<int> s){
   for (int i = 0; i < n; i++){
     if (s.count(i) == 0){
@@ -45,6 +46,7 @@ int solve(vector<vector<double>> bars){
       if (zones - forbid.size() == 1){ 
         return ans(zones, forbid);} 
         
+ 
       vector<vector<double>> bars1 = bars;
       for (int j=0; j < bars.size(); j++){
         bars1[j][0] = 2*bars[i][0] - bars[j][0];}
@@ -54,13 +56,22 @@ int solve(vector<vector<double>> bars){
     }
     i += 1;
   }
+  
+ 
+  if (!right){ 
+    return int(0); 
+  }else{ 
+    return bars.size(); 
+  }
+  return 0;
+}
 
 
 int main(int argc, char** argv) {
   if(argc == 2){
       
   }else{
-      
+    
   }
   
 
