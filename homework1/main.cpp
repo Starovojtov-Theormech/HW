@@ -1,44 +1,68 @@
-#include <stdlib.h>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include "functions.h"
 #include <cmath>
+
 using namespace std;
 
-int main(int argc, char** argv)
-{
-	string input_name;
 
-	if (argc == 2)
-	{
-		input_name = argv[1];
-	}
-	else {
-		input_name = "in.txt";
-	}
-	ifstream input_file(input_name);
+int main() {
+    string file_name = "in.txt";
+    int variant = 2;
+    //cout << "Вариант: ";
+    //cin >> variant;
 
-	int x, y, x0, y0, xl = 0, yl = 0, xr = 0, yr = 0;
+    double rightcos, leftcos;
+    rightcos = leftcos = 1;
 
-	double cosr = 1, cosl = 1, cos;
+    double distancee, rightdistance, leftdistance;
+    rightdistance = leftdistance = 0;
+    int x0, y0;
+    int x, y, Rightmost_x, Rightmost_y, Leftmost_x, Leftmost_y;
 
-	input_file >> x0 >> y0;
+    std::ifstream infile(file_name);
+    infile >> x0 >> y0;
 
-	while (input_file >> x >> y)
-	{
-		cos = (x0*x + y0 * y) / (sqrt(x*x + y * y)*sqrt(x0*x0 + y0 * y0));
-		cos = round(cos * 1000.0) / 1000.0;
-		if (cos <= cosl && (y0*x < x0*y))
-		{
-			cosl = cos;
-			xl = x; yl = y;
-		}
-		if (cos <= cosr && (y0*x >= x0 * y))
-		{
-			cosr = cos;
-			xr = x; yr = y;
-		}
-	}
+    if (variant == 1) {
+        while (infile >> x >> y) {
 
-	cout << "Leftmost: " << xl << " " << yl << endl;
-	cout << "Rightmost: " << xr << " " << yr << endl;
+            double coss = (x0 * x + y0 * y) / (sqrt(x * x + y * y) * sqrt(x0 * x0 + y0 * y0));
+            coss = std::round(coss * 10000000000.0) / 10000000000.0;
+
+
+            if (coss <= leftcos && (y0 * x < x0 * y)) {
+                Leftmost_x = x;
+                Leftmost_y = y;
+                leftcos = coss;
+            }
+
+            if (coss <= rightcos && (y0 * x >= x0 * y)) {
+                Rightmost_x = x;
+                Rightmost_y = y;
+                rightcos = coss;
+
+            }
+        }
+    } else {
+            while (infile >> x >> y) {
+                distancee = abs(distance(x0, y0, x, y));
+                if (isright(x0, y0, x, y)) {
+                    if (distancee >= rightdistance) {
+                        Rightmost_x = x;
+                        Rightmost_y = y;
+                        rightdistance = distancee;
+                    }
+                } else {
+                    if (distancee >= leftdistance) {
+                        Leftmost_x = x;
+                        Leftmost_y = y;
+                        leftdistance = distancee;
+                    }
+                }
+            }
+        }
+
+
+    cout << "Leftmost: " << Leftmost_x << " " << Leftmost_y << endl;
+    cout << "Rightmost: " << Rightmost_x << " " << Rightmost_y << endl;
 }
