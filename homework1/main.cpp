@@ -29,7 +29,7 @@ int main() {
                 leftcos = coss;
             }
 
-            if (coss <= rightcos && (y0 * x > x0 * y)) {
+            if (coss <= rightcos && (y0 * x >= x0 * y)) {
                 Rightmost_x = x;
                 Rightmost_y = y;
                 rightcos = coss;
