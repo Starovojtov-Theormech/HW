@@ -16,26 +16,26 @@ int main(int argc, char** argv) {
         file_name = string(argv[1]);
     }
 
-    vector <Barrier> Barriers;
+    vector <Wall> Walls;
     double h;
-    Vector2D V{};
-    Barrier B;
+    Skorost V{};
+    Wall B;
 
     ifstream file(file_name);
     file >> h;
     file >> V.x >> V.y;
 
     while (file >> B.x >> B.h) {
-        Barriers.push_back(B);
+        Walls.push_back(B);
     }
-    int l = Barriers.size();
+    int l = Walls.size();
     file.close();
 
 
     const double g = 9.81;
-    Point Point{};
-    Point.x = 0;
-    Point.y = h;
+    Tochka Tochka{};
+    Tochka.x = 0;
+    Tochka.y = h;
     int cur_bar = -1;
     int direction = 1;
 
@@ -52,10 +52,10 @@ int main(int argc, char** argv) {
             return 0;
         }
 
-        double x = Barriers[m].x;
-        double bar = Barriers[m].h;
-        double t = abs((x - Point.x)) / abs(V.x);
-        double fall_time = (V.y + sqrt(V.y*V.y+2*g*Point.y))/g;
+        double x = Walls[m].x;
+        double bar = Walls[m].h;
+        double t = abs((x - Tochka.x)) / abs(V.x);
+        double fall_time = (V.y + sqrt(V.y*V.y+2*g*Tochka.y))/g;
 
 
         if (fall_time < t) {
@@ -67,8 +67,8 @@ int main(int argc, char** argv) {
         double y = Point.y + V.y * t - (g * t * t) / 2;
 
         V.y = V.y-g*t;
-        Point.x = x;
-        Point.y = y;
+        Tochka.x = x;
+        Tochka.y = y;
         cur_bar = m;
 
         if (y < bar) {
