@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
             return 0;
 
         }
-        double y = Point.y + V.y * t - (g * t * t) / 2;
+        double y = Tochka.y + V.y * t - (g * t * t) / 2;
 
         V.y = V.y-g*t;
         Tochka.x = x;
