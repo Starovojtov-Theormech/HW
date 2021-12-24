@@ -11,7 +11,7 @@ struct Skorost {
     double y;
 };
 
-struct Stena {
+struct Wall {
     double x;
     double h;
 };
