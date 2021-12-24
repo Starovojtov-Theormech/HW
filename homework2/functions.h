@@ -1,17 +1,17 @@
 #ifndef UNTITLED_FUNCTIONS_H
 #define UNTITLED_FUNCTIONS_H
 
-struct Point {
+struct Tochka {
     double x;
     double y;
 };
 
-struct Vector2D {
+struct Skorost {
     double x;
     double y;
 };
 
-struct Barrier {
+struct Stena {
     double x;
     double h;
 };
